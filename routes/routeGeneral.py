@@ -90,10 +90,15 @@ def getUsers(token: str = Depends(oauth2_scheme)):
 async def creatUser(user: Users):
     new_user = {"username": user.username, 
                 "password": get_password_hash(user.password)}
+    validar = conn.execute(usuario.select().where(usuario.c.username == user.username)).first()
+    if validar != None:   
+        msg = {"message":"El usuario ya se encuentra registrado"}
+    else:
+        result = conn.execute(usuario.insert().values(new_user))
+        msg = {"message":"Registrado correctamente"}
 
-    result = conn.execute(usuario.insert().values(new_user))
 
-    return {"message":"Registrado correctamente"}
+    return msg
 
 #DEPARTAMENTO
 @api.get("/getDepartamentos", tags=["Departamento"])
@@ -126,8 +131,15 @@ async def getPersonabyDep(dep_id, token: str = Depends(oauth2_scheme)):
 @api.post('/creatPerson',  tags=["Persona"])
 async def creatPerson(person: Personas, token: str = Depends(oauth2_scheme)):
     pers = dict(person)
-    result = conn.execute(persona.insert().values(pers))
-    return {"message":"Registrado correctamente"}
+    validar = conn.execute(persona.select().where(persona.c.pers_ced == person.pers_ced)).first()
+    if validar != None:   
+        msg = {"message":"El registro ya se encuentra registrado"}
+    else:
+        result = conn.execute(persona.insert().values(pers))
+        msg = {"message":"Registrado correctamente"}
+
+    return msg
+
 
 @api.delete('/delPerson/{id}', tags=["Persona"])
 async def delPersona(id, token: str = Depends(oauth2_scheme)):
@@ -169,8 +181,14 @@ async def getEgreEncu_Apo(egre_ApoyoAcred, token: str = Depends(oauth2_scheme)):
 @api.post('/createEgreEnc',  tags=["Egresado"])
 async def createEgreEnc(egreenc: Egresado_encuesta, token: str = Depends(oauth2_scheme)):
     pers = dict(egreenc)
-    result = conn.execute(egresado_encuesta.insert().values(pers))
-    return {"message":"Registrado correctamente"}
+    validar = conn.execute(egresado_encuesta.select().where(egresado_encuesta.c.egre_id == egreenc.egre_id)).first()
+    if validar != None:   
+        msg = {"message":"El registro ya se encuentra registrado"}
+    else:
+        result = conn.execute(egresado_encuesta.insert().values(pers))
+        msg = {"message":"Registrado correctamente"}
+
+    return msg
 
 @api.delete('/delEgreEnc/{id}', tags=["Egresado"])
 async def delEgreEnc(id, token: str = Depends(oauth2_scheme)):
