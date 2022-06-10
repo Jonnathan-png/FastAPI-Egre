@@ -105,6 +105,11 @@ async def creatUser(user: Users):
 def getDepart(token: str = Depends(oauth2_scheme)):
     return conn.execute(departamento.select()).fetchall()
 
+@api.get("/getDepartamentos2", tags=["Departamento"])
+def getDepart2():
+    return conn.execute(departamento.select()).fetchall()
+
+
 #MUNICIPIO
 @api.get("/getMunicipios", tags=["Municipio"])
 def getMunicipios(token: str = Depends(oauth2_scheme)):
