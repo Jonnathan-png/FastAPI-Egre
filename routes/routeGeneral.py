@@ -63,10 +63,10 @@ def create_access_token(data: dict, expires_delta: timedelta):
 
     return encoded_jwt
 
-@api.post("/token",tags=["Users"])
-def login (form_data: OAuth2PasswordRequestForm = Depends()):
-    username = form_data.username
-    password = form_data.password
+@api.post("/login",tags=["Users"])
+def login (user: Users):
+    username = user.username
+    password = user.password
 
     if authenticate_user(username,password):
         access_token = create_access_token(
