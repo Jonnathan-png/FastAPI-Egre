@@ -76,17 +76,31 @@ def login (user: Users):
     else:
         raise HTTPException(status_code=400, detail="Incorrect User or Password")
 
+@api.post("/token", tags=["Users"])
+def login2 (form_data: OAuth2PasswordRequestForm = Depends()):
+    username = form_data.username
+    password = form_data.password
+
+    if authenticate_user(username,password):
+        access_token = create_access_token(
+            data = {"sub": username}, expires_delta = timedelta(minutes=30)
+        )
+        return {"access_token": access_token, "token_type": "bearer" , "username": username}
+    else:
+        raise HTTPException(status_code=400, detail="Incorrect User or Password")
+
+
 @api.get("/",tags=["Users"])
 def mifuncion(token: str = Depends(oauth2_scheme)):
     return {"token": token}
     
-@api.get("/getUsers", tags=["User"])
+@api.get("/getUsers", tags=["Users"])
 def getUsers(token: str = Depends(oauth2_scheme)):
     return conn.execute(usuario.select()).fetchall()
     #return session.query(usuario).from_statement(text("SELECT * FROM usuario")).all()
 
 
-@api.post('/creatUser',  tags=["User"])
+@api.post('/creatUser',  tags=["Users"])
 async def creatUser(user: Users):
     new_user = {"username": user.username, 
                 "password": get_password_hash(user.password)}
@@ -104,11 +118,6 @@ async def creatUser(user: Users):
 @api.get("/getDepartamentos", tags=["Departamento"])
 def getDepart(token: str = Depends(oauth2_scheme)):
     return conn.execute(departamento.select()).fetchall()
-
-@api.get("/getDepartamentos2", tags=["Departamento"])
-def getDepart2():
-    return conn.execute(departamento.select()).fetchall()
-
 
 #MUNICIPIO
 @api.get("/getMunicipios", tags=["Municipio"])
@@ -140,7 +149,7 @@ async def creatPerson(person: Personas, token: str = Depends(oauth2_scheme)):
     if validar != None:   
         msg = {"message":"El registro ya se encuentra registrado"}
     else:
-        result = conn.execute(persona.insert().values(pers))
+        result = conn.execute(persona.insert().values(dict(pers)))
         msg = {"message":"Registrado correctamente"}
 
     return msg
