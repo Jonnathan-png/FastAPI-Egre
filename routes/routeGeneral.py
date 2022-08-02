@@ -125,8 +125,8 @@ def getMunicipios(token: str = Depends(oauth2_scheme)):
     return conn.execute(municipio.select()).fetchall()
 
 @api.get(
-    '/getMunicipio/{id}', tags=["Municipio"])
-async def getMunicipio(depa_id, token: str = Depends(oauth2_scheme)):
+    '/getMunicipioPorDepart/{depa_id}', tags=["Municipio"])
+async def getMunicipio(depa_id: int, token: str = Depends(oauth2_scheme)):
     return conn.execute(municipio.select().where(municipio.c.depa_id == depa_id)).all()
 
 #PERSONA
@@ -135,11 +135,11 @@ def getPersonas(token: str = Depends(oauth2_scheme)):
     return conn.execute(persona.select()).fetchall()
 
 @api.get('/getPerson/{id}', tags=["Persona"])
-async def getPersona(id, token: str = Depends(oauth2_scheme)):
+async def getPersona(id: int, token: str = Depends(oauth2_scheme)):
     return conn.execute(persona.select().where(persona.c.pers_ced == id)).first()
 
 @api.get('/getPersonbyDep/{dep_id}', tags=["Persona"])
-async def getPersonabyDep(dep_id, token: str = Depends(oauth2_scheme)):
+async def getPersonabyDep(dep_id: int, token: str = Depends(oauth2_scheme)):
     return conn.execute(persona.select().where(persona.c.depa_id == dep_id)).first()
 
 @api.post('/creatPerson',  tags=["Persona"])
