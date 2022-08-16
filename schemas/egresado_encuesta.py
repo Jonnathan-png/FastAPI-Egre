@@ -15,5 +15,6 @@ class Egresado_encuesta (BaseModel):
     egre_estudio: str
     egre_creadoEmpre: str
     egre_nombreEmpre: str
+    egre_finalidadEmpre: str
     egre_Aporte: str
     egre_ApoyoAcred: str

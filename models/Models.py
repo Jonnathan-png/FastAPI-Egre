@@ -53,6 +53,7 @@ egresado_encuesta = Table("egresado_encuesta", meta,
     Column("egre_estudio", String(50)),
     Column("egre_creadoEmpre", String(20)),
     Column("egre_nombreEmpre", String(50)),
+    Column("egre_finalidadEmpre", String(250)),
     Column("egre_Aporte", String(255)),
     Column("egre_ApoyoAcred", String(255)),
     ForeignKeyConstraint(
