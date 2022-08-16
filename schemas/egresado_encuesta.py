@@ -1,7 +1,7 @@
 from pydantic import BaseModel
-
+from typing import Optional
 class Egresado_encuesta (BaseModel):
-    egre_id: int
+    egre_id: Optional[int]
     pers_ced: int
     egre_inicio: str
     egre_fechafin: str

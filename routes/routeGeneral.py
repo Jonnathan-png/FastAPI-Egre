@@ -17,6 +17,8 @@ from passlib.context import CryptContext
 from datetime import datetime, timedelta
 #JSON WEB TOKEN
 from jose import jwt
+#RANDOMM
+import random
 
 
 api = APIRouter()
@@ -194,6 +196,8 @@ async def getEgreEncu_Apo(egre_ApoyoAcred, token: str = Depends(oauth2_scheme)):
 
 @api.post('/createEgreEnc',  tags=["Egresado"])
 async def createEgreEnc(egreenc: Egresado_encuesta, token: str = Depends(oauth2_scheme)):
+    numrandom = random.randint(1,99999)
+    egreenc.egre_id = numrandom;
     pers = dict(egreenc)
     validar = conn.execute(egresado_encuesta.select().where(egresado_encuesta.c.egre_id == egreenc.egre_id)).first()
     if validar != None:   
@@ -224,6 +228,7 @@ async def updEgreEnc(id, egreenc: Egresado_encuesta, token: str = Depends(oauth2
             egre_estudio = egreenc.egre_estudio,
             egre_creadoEmpre = egreenc.egre_creadoEmpre,
             egre_nombreEmpre = egreenc.egre_nombreEmpre,
+            egre_finalidadEmpre = egreenc.egre_finalidadEmpre,
             egre_Aporte = egreenc.egre_Aporte,
             egre_ApoyoAcred = egreenc.egre_ApoyoAcred)
             .where(egresado_encuesta.c.egre_id == id))
